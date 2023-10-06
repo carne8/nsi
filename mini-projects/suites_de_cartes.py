@@ -32,8 +32,8 @@ def findSuitesInList(l: list[int]) -> list[list[int]]:
 
         last_number = number
 
-    print(l)
-    print(suites)
+    suites.append(copy.deepcopy(last_suite))
+    last_suite = [number]
 
     return suites
 
