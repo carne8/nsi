@@ -28,7 +28,7 @@ def findSuitesInList(l: list[int]) -> list[list[int]]:
             last_suite.append(number)
         else:
             suites.append(copy.deepcopy(last_suite))
-            last_suite.clear()
+            last_suite = [number]
 
         last_number = number
 
