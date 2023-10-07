@@ -5,9 +5,6 @@ class Stack:
     def __init__(self, nb_cards: int):
         self.stack = [i + 1 for i in range(nb_cards)]
 
-    def print(self):
-        print(self.stack)
-
     def shuffle(self):
         random.shuffle(self.stack)
 
@@ -47,8 +44,9 @@ def getPointsForSuite (suite: list[int]) -> int:
 
 
 class Player:
-    def __init__(self):
-        self.stack = Stack(32)
+    def __init__(self, id):
+        self.id = id
+        self.stack = Stack(10) # TODO
         self.stack.shuffle()
 
     def pickCards(self):
@@ -57,20 +55,36 @@ class Player:
         suites = findSuitesInList(picked_cards)
         return sum(map(getPointsForSuite, suites))
 
-# nb_players = int(input("Combien de joueurs vont jouer ?"))
-# nb_parties = int(input("Combien de parties allons nous jouer ?"))
 
-def playAParty(nb_players: int = 9):
-    players = [("player:" + str(i+1), Player()) for i in range(nb_players)]
+def jouerUnePartie(player: Player):
+    points = player.pickCards()
+    print(player.id, "=>", points) # Not definitive
 
-    for (playerId, player) in players:
-        print(player.pickCards())
+    return points
 
-        # Play round
-        # round_results[player_id] = player.pickCards
+def jouerParties(nb_players: int = 9):
 
-    # print(round_results)
+    # Create a list of players with an id based on their index
+    players = [Player("player:" + str(i+1)) for i in range(nb_players)]
+
+    winningPlayers = []
+    maxEarnedPoints = 0
 
 
-playAParty()
-# print(findSuitesInList([0,1,2,3,6,7,8,12]))
+    # Play a round for each player
+    for player in players:
+        points = jouerUnePartie(player)
+
+        if points > maxEarnedPoints:
+            winningPlayers = [ player.id ]
+            maxEarnedPoints = points
+        elif points == maxEarnedPoints:
+            winningPlayers.append(player.id)
+
+    print("winningPlayers", winningPlayers)
+
+try:
+    nb_players = int(input("Combien de joueurs vont jouer ?"))
+    jouerParties(nb_players)
+except:
+    jouerParties()
